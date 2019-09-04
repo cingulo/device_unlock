@@ -1,14 +1,26 @@
 # device_unlock
 
-A new flutter plugin project.
+A Flutter plugin to request the device unlock screen.
 
-## Getting Started
+## Sample code
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```
+try {
+    if (await DeviceUnlock.request()) {
+        // Unlocked successfully.
+    } else {
+        // Did not pass face, touch or pin validation.
+    }
+} on DeviceUnlockUnavailable catch (_) {
+    // Device does not have face, touch or pin security available.
+}
+```
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## How does it work
+
+The following attempts and fallbacks should be made:
+
+1. Is face unlock available? Request and return true if user passed validation or false otherwise.
+2. Is touch unlock available? Request and return true if user passed validation or false otherwise.
+3. Is pin unlock available? Request and return true if user passed validation or false otherwise.
+4. If the device does not have face, touch or pin security, throw an exception and let the dev decide what to do.
