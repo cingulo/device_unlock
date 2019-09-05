@@ -12,16 +12,14 @@ public class SwiftDeviceUnlockPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
       case "request":
-        let unlocked = self.request { (unlocked) in
-          result(unlocked)
-        }
+        self.requestWithFlutterResult(result)
         break
       default:
         result(FlutterMethodNotImplemented)
     }
   }
 
-  private func request(completionBlock: @escaping (Bool) -> Void) {
+  private func requestWithFlutterResult(_ flutterResult: @escaping FlutterResult) {
     let context = LAContext()
     var evaluationError: NSError?
     let policy: LAPolicy
@@ -34,12 +32,15 @@ public class SwiftDeviceUnlockPlugin: NSObject, FlutterPlugin {
 
     if (!context.canEvaluatePolicy(policy, error: &evaluationError)) {
         if(evaluationError?.code == LAError.passcodeNotSet.rawValue) {
-            //TODO: Return exception
-            completionBlock(true)
+          // Since when passcode is not available no local auth is available, we can just consider this scenario
+          let error = FlutterError(code: "DeviceUnlockUnavailable",
+                                   message: evaluationError?.localizedDescription,
+                                   details: evaluationError?.domain)
+            flutterResult(error)
         }
     } else {
         context.evaluatePolicy(policy, localizedReason: reason) { (success, error) in
-            completionBlock(success)
+            flutterResult(success)
         }
     }
   }

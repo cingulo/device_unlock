@@ -26,9 +26,15 @@ class _MyAppState extends State<MyApp> {
         _textToShow = 'Hidden Text';
         _btnText = 'Show';
       });
-    } else {      
-      var unlocked = await deviceUnlock.request();
+    } else {
+      var unlocked = false;
 
+      try {
+        unlocked = await deviceUnlock.request();  
+      } on DeviceUnlockUnavailable {
+        unlocked = true;
+      }
+      
       if (unlocked) {
         setState(() {
           _textToShow = 'Secret text now available';
