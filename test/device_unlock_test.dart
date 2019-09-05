@@ -7,7 +7,7 @@ void main() {
 
   setUp(() {
     channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
+      return true;
     });
   });
 
@@ -15,7 +15,8 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await DeviceUnlock.platformVersion, '42');
+  test('request', () async {
+    final deviceUnlock = DeviceUnlock();
+    expect(await deviceUnlock.request(), true);
   });
 }
