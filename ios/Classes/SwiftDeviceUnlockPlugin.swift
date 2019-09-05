@@ -9,6 +9,18 @@ public class SwiftDeviceUnlockPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
+    switch call.method {
+      case "request":
+        let unlocked = self.request()
+        result(unlocked)
+        break
+      default:
+        result(FlutterMethodNotImplemented)
+    }
   }
+
+  private func request() -> Bool {
+    return true
+  }
+
 }

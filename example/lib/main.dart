@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:device_unlock/device_unlock.dart';
 
 void main() => runApp(MyApp());
@@ -12,32 +10,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  var _textToShow = 'Hidden Text';
+  var _btnText = 'Show';
+  DeviceUnlock deviceUnlock;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    deviceUnlock = DeviceUnlock();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await DeviceUnlock.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+  void pressedButton() async {
+    if (_btnText == 'Hide') {
+      setState(() {
+        _textToShow = 'Hidden Text';
+        _btnText = 'Show';
+      });
+    } else {      
+      var unlocked = await deviceUnlock.request();
+
+      if (unlocked) {
+        setState(() {
+          _textToShow = 'Secret text now available';
+          _btnText = 'Hide';
+        });
+      }
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -45,10 +43,23 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Unlock example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(_textToShow),
+              Container(
+                margin: EdgeInsets.only(top: 50),
+                child: FlatButton(
+                  child: Text(_btnText),
+                  color: Colors.blue,
+                  onPressed: pressedButton,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
