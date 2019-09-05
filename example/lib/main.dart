@@ -30,11 +30,13 @@ class _MyAppState extends State<MyApp> {
       var unlocked = false;
 
       try {
-        unlocked = await deviceUnlock.request();  
+        unlocked = await deviceUnlock.request(
+          localizedReason: "We need to check your credentials to allow you to see the hidden text",
+        );
       } on DeviceUnlockUnavailable {
         unlocked = true;
       }
-      
+
       if (unlocked) {
         setState(() {
           _textToShow = 'Secret text now available';

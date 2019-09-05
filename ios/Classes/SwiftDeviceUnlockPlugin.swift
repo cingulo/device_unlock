@@ -12,14 +12,17 @@ public class SwiftDeviceUnlockPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
       case "request":
-        self.requestWithFlutterResult(result)
+        guard let localizedReason = call.arguments as? String else {
+          return
+        }
+        self.requestWithLocalizedReason(localizedReason, withResult: result)
         break
       default:
         result(FlutterMethodNotImplemented)
     }
   }
 
-  private func requestWithFlutterResult(_ flutterResult: @escaping FlutterResult) {
+  private func requestWithLocalizedReason(_ localizedReason: String, withResult flutterResult: @escaping FlutterResult) {
     let context = LAContext()
     var evaluationError: NSError?
     let policy: LAPolicy
@@ -28,7 +31,6 @@ public class SwiftDeviceUnlockPlugin: NSObject, FlutterPlugin {
     } else {
       policy = LAPolicy.deviceOwnerAuthenticationWithBiometrics
     }
-    let reason = "We need to check your credentials"
 
     if (!context.canEvaluatePolicy(policy, error: &evaluationError)) {
         if(evaluationError?.code == LAError.passcodeNotSet.rawValue) {
@@ -39,7 +41,7 @@ public class SwiftDeviceUnlockPlugin: NSObject, FlutterPlugin {
             flutterResult(error)
         }
     } else {
-        context.evaluatePolicy(policy, localizedReason: reason) { (success, error) in
+        context.evaluatePolicy(policy, localizedReason: localizedReason) { (success, error) in
             flutterResult(success)
         }
     }
