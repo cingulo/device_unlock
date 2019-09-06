@@ -1,8 +1,10 @@
 name: device_unlock
-description: A new flutter plugin project.
-version: 0.0.1
-author:
-homepage:
+description: A Flutter plugin to request the device unlock screen..
+version: 0.1.0
+author: Cíngulo <dev@cingulo.com>
+homepage: https://dev.cingulo.com
+repository: https://github.com/cingulo/device_unlock
+documentation: https://github.com/cingulo/device_unlock/blob/develop/README.md
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
