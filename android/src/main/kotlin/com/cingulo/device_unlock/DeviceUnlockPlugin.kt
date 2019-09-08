@@ -40,14 +40,6 @@ class DeviceUnlockPlugin(private val registrar: Registrar): MethodCallHandler {
       return
     }
 
-//    if (activity !is FragmentActivity) {
-//      result.error(
-//          "NoFragmentActivity",
-//          "unlock_devices plugin requires activity to be a FragmentActivity.",
-//          null)
-//      return
-//    }
-
     val keyguardManager = activity.getSystemService(KEYGUARD_SERVICE) as KeyguardManager?
 
     if(keyguardManager == null) {
@@ -67,20 +59,27 @@ class DeviceUnlockPlugin(private val registrar: Registrar): MethodCallHandler {
     }
 
     val localizedReason = call.arguments as String
-    DeviceUnlockManager(activity, keyguardManager, localizedReason, object : DeviceUnlockCallback{
+    val deviceUnlockManager = DeviceUnlockManager(activity, keyguardManager, localizedReason, object : DeviceUnlockCallback{
       override fun onSuccess() {
-        result.success(true)
+        if (authInProgress.compareAndSet(true, false)) {
+          result.success(true);
+        }
       }
 
       override fun onFailure() {
-        result.success(false)
+        if (authInProgress.compareAndSet(true, false)) {
+          result.success(false);
+        }
       }
 
       override fun onError(code: String, error: String) {
-        result.error(code, error, null)
+        if (authInProgress.compareAndSet(true, false)) {
+          result.error(code, error, null);
+        }
       }
-    }).authenticate()
-
+    })
+    registrar.addActivityResultListener(deviceUnlockManager)
+    deviceUnlockManager.authenticate()
   }
 
   companion object {
