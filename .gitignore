@@ -5,3 +5,11 @@
 .pub/
 
 build/
+
+
+.idea
+.classpath
+.project
+android/.settings
+example/android/.settings
+example/android/app/.settings
