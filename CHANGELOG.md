@@ -5,3 +5,7 @@
 ## 1.0.0
 
 - Launcing first version
+
+# 1.0.1
+
+- Update descriptions
