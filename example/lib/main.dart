@@ -35,6 +35,10 @@ class _MyAppState extends State<MyApp> {
         );
       } on DeviceUnlockUnavailable {
         unlocked = true;
+      } on RequestInProgress {
+        unlocked = true;
+      } on NoForegroundActivity {
+        unlocked = true;
       }
 
       if (unlocked) {

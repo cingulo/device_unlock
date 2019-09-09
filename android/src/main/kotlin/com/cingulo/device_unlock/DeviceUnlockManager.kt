@@ -10,19 +10,17 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 import java.util.concurrent.atomic.AtomicBoolean
 
-
 class DeviceUnlockManager(
-    private val activity : Activity
+    private val activity: Activity
 ) : PluginRegistry.ActivityResultListener {
 
-
     private val authInProgress = AtomicBoolean(false)
-    private var keyguardManager : KeyguardManager? = null
+    private var keyguardManager: KeyguardManager? = null
     private var deviceUnlockCallback: DeviceUnlockCallback? = null
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-        if(keyguardRequestCode == requestCode) {
-            if(RESULT_OK == resultCode){
+        if (keyguardRequestCode == requestCode) {
+            if (RESULT_OK == resultCode) {
                 deviceUnlockCallback?.onSuccess()
             } else {
                 deviceUnlockCallback?.onFailure()
@@ -32,23 +30,22 @@ class DeviceUnlockManager(
         return true
     }
 
-
-    private fun validate() : Pair<String, String>? {
+    private fun validate(): Pair<String, String>? {
         if (!authInProgress.compareAndSet(false, true)) {
             return Pair("RequestInProgress", "unlock in progress")
         }
 
-        if(activity.isFinishing) {
-            return Pair("NoActivity", "unlock_device plugin requires a foreground activity")
+        if (activity.isFinishing) {
+            return Pair("NoForegroundActivity", "unlock_device plugin requires a foreground activity")
         }
 
         keyguardManager = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?
             ?: return Pair(
-                "NoKeyguardManager",
+                "DeviceUnlockUnavailable",
                 "unlock_devices plugin could not retrieve the KeyguardManager.")
 
-        if(keyguardManager?.isKeyguardSecure != false) {
-            Pair (
+        if (keyguardManager?.isKeyguardSecure != false) {
+            Pair(
                 "DeviceUnlockUnavailable",
                 "The Device does not have patter, face, touch or pin security available.")
         }
@@ -61,7 +58,7 @@ class DeviceUnlockManager(
             result.error(error.first, error.second, null)
             return
         }
-        deviceUnlockCallback = object : DeviceUnlockCallback{
+        deviceUnlockCallback = object : DeviceUnlockCallback {
             override fun onSuccess() {
                 if (authInProgress.compareAndSet(true, false)) {
                     result.success(true)
@@ -89,7 +86,6 @@ class DeviceUnlockManager(
     companion object {
         private const val keyguardRequestCode = 10010
     }
-
 }
 
 interface DeviceUnlockCallback {
