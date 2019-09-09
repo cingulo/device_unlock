@@ -25,8 +25,7 @@ class DeviceUnlock {
   Future<bool> request({@required String localizedReason}) async {
     assert(localizedReason != null);
     try {
-      final result = await _channel.invokeMethod('request', localizedReason);
-      return result;
+      return await _channel.invokeMethod('request', localizedReason);
     } on PlatformException catch (e) {
       if (e.code == "DeviceUnlockUnavailable") {
         throw DeviceUnlockUnavailable();
