@@ -9,9 +9,6 @@ class DeviceUnlockUnavailable implements Exception {}
 /// Exception to notify when a second request was invoked before receive the first request answer
 class RequestInProgress implements Exception {}
 
-/// Android exception to notify when there is no foreground Activity
-class NoForegroundActivity implements Exception {}
-
 /// A Flutter plugin focused on authenticating the user identity locally
 /// with native passcode as a fallback
 class DeviceUnlock {
@@ -37,8 +34,6 @@ class DeviceUnlock {
         throw DeviceUnlockUnavailable();
       } else if (e.code == "RequestInProgress") {
         throw RequestInProgress();
-      } else if (e.code == "NoForegroundActivity") {
-        throw NoForegroundActivity();
       } else {
         return throw e;
       }

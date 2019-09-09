@@ -9,3 +9,7 @@
 # 1.0.1
 
 - Update descriptions
+
+# 1.1.0
+
+- Simplify exceptions

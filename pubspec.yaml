@@ -1,6 +1,6 @@
 name: device_unlock
 description: A Flutter plugin to request the device unlock screen. This plugin offers a simple way to check the user identity using the default device security.
-version: 1.0.1
+version: 1.0.2
 author: Cíngulo <dev@cingulo.com>
 homepage: https://dev.cingulo.com
 repository: https://github.com/cingulo/device_unlock

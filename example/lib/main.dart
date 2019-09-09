@@ -37,8 +37,6 @@ class _MyAppState extends State<MyApp> {
         unlocked = true;
       } on RequestInProgress {
         unlocked = true;
-      } on NoForegroundActivity {
-        unlocked = true;
       }
 
       if (unlocked) {

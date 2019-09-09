@@ -36,7 +36,7 @@ class DeviceUnlockManager(
         }
 
         if (activity.isFinishing) {
-            return Pair("NoForegroundActivity", "unlock_device plugin requires a foreground activity")
+            return Pair("DeviceUnlockUnavailable", "unlock_device plugin requires a foreground activity")
         }
 
         keyguardManager = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager?

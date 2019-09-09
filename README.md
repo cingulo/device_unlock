@@ -26,7 +26,5 @@ try {
     // A new request was sent before the first one finishes
 } on DeviceUnlockUnavailable {
     // Device does not have face, touch or pin security available.
-} on NoForegroundActivity {
-    // It's an Android exception. It happens when there is no foreground acivity e.g. When user receive a call during unlock screen.
 }
 ```
