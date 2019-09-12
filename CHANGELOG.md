@@ -13,3 +13,7 @@
 ## 1.1.0
 
 - Simplify exceptions
+
+## 1.1.1
+
+- [Android] Fix KeyguardManager
