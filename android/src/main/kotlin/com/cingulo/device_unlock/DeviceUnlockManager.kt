@@ -80,7 +80,12 @@ class DeviceUnlockManager(
 
         val localizedReason = call.arguments as String
         val intent = keyguardManager?.createConfirmDeviceCredentialIntent(localizedReason, "")
-        activity.startActivityForResult(intent, keyguardRequestCode)
+        if (intent == null) {
+            result.error("DeviceUnlockUnavailable",
+            "The Device does not have patter, face, touch or pin security available.", null)
+        } else {
+            activity.startActivityForResult(intent, keyguardRequestCode)
+        }
     }
 
     companion object {
