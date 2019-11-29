@@ -26,8 +26,9 @@ class DeviceUnlockManager(
                 deviceUnlockCallback?.onFailure()
             }
             deviceUnlockCallback = null
+            return true
         }
-        return true
+        return false
     }
 
     private fun validate(): Pair<String, String>? {
