@@ -17,7 +17,7 @@ The following attempts and fallbacks are made:
 import 'package:device_unlock/device_unlock.dart';
 
 try {
-    if (await DeviceUnlock.request(localizedReason: "We need to check your identity.")) {
+    if (await DeviceUnlock().request(localizedReason: "We need to check your identity.")) {
         // Unlocked successfully.
     } else {
         // Did not pass face, touch or pin validation.
